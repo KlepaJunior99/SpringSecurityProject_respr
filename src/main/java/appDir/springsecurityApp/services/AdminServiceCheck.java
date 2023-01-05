@@ -9,7 +9,7 @@ public class AdminServiceCheck {
     public void doAdminStuff() {
         System.out.println("Админ");
     }
-    @PreAuthorize("hasRole('ROLE_MODERATOR') or ('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN')")
     public void doModeratorStuff() {
         System.out.println("Модератор");
     }
