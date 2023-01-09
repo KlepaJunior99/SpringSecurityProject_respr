@@ -6,7 +6,8 @@ import appDir.springsecurityApp.model.Role;
 public interface UserService {
     Person show(int id);
 
-    void update(Person updatedPerson, Role updatedRole, int id);
+    void update(Person updatedPerson);
 
     void delete(int id);
+    void register(Person person);
 }

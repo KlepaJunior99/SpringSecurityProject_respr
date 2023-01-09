@@ -19,6 +19,8 @@
 <br/>
 <b>password человека:</b>
 <p th:text="${person.getPassword()}">VALUE</p>
+<b>Users роль:</b>
+<p th:text="${person.getRoles()}">VALUE</p>
 <form th:action="@{/users/{id}/edit(id=${person.getId()})}">
     <br/>
     <input type="submit" value="Изменить"/>

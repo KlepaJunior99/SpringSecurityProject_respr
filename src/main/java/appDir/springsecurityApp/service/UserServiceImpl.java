@@ -1,33 +1,50 @@
 package appDir.springsecurityApp.service;
 
-import appDir.springsecurityApp.dao.PersonDAO;
 import appDir.springsecurityApp.model.Person;
 import appDir.springsecurityApp.model.Role;
+import appDir.springsecurityApp.rep.PeopleRepository;
+import appDir.springsecurityApp.rep.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+import java.util.HashSet;
+import java.util.Set;
+
+@Service
 public class UserServiceImpl implements UserService {
-    private final PersonDAO personDAO;
+    private final PeopleRepository peopleRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public UserServiceImpl(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    public UserServiceImpl(PeopleRepository peopleRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+        this.peopleRepository = peopleRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional()
     @Override
     public Person show(int id) {
-        return personDAO.show(id);
+        return peopleRepository.findById(id).get();
+    }
+    @Override
+    public void register(Person person) {
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(roleRepository.findByName("ROLE_USER").get());
+        person.setRoles(roleSet);
+        peopleRepository.save(person);
     }
 
     @Override
-    public void update(Person updatedPerson, Role updatedRole, int id) {
-        personDAO.update(updatedPerson, updatedRole, id);
+    public void update(Person updatedPerson) {
+        peopleRepository.saveAndFlush(updatedPerson);
     }
 
     @Override
     public void delete(int id) {
-        personDAO.delete(id);
+        peopleRepository.deleteById(id);
     }
 }

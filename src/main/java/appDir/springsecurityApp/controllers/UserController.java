@@ -1,11 +1,9 @@
 package appDir.springsecurityApp.controllers;
 
-import appDir.springsecurityApp.dao.PersonDAO;
 import appDir.springsecurityApp.model.Person;
 import appDir.springsecurityApp.model.Role;
 import appDir.springsecurityApp.service.UserServiceImpl;
 import appDir.springsecurityApp.services.PersonDetailsService;
-import appDir.springsecurityApp.services.RegistrationService;
 import appDir.springsecurityApp.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,14 +17,12 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private final RegistrationService registrationService;
     private final PersonValidator personValidator;
     private final UserServiceImpl userService;
     private final PersonDetailsService personDetailsService;
 
     @Autowired
-    public UserController(RegistrationService registrationService, PersonValidator personValidator, PersonDAO userDAO, UserServiceImpl userService, PersonDetailsService personDetailsService) {
-        this.registrationService = registrationService;
+    public UserController(PersonValidator personValidator, UserServiceImpl userService, PersonDetailsService personDetailsService) {
         this.personValidator = personValidator;
         this.userService = userService;
         this.personDetailsService = personDetailsService;
@@ -44,12 +40,11 @@ public class UserController {
         return "useService/edit";
     }
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute("person") @Valid Person person, @ModelAttribute("role") @Valid Role role, BindingResult bindingResult, @PathVariable("id")int id) {
-        userService.delete(id);
+    public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult, @PathVariable("id")int id) {
         personValidator.validate(person, bindingResult);
         if(bindingResult.hasErrors())
             return "useService/show";
-        registrationService.register(person);
+        userService.update(person);
         return "redirect:/user";
     }
     @PostMapping("/delete/{id}")

@@ -1,7 +1,7 @@
 package appDir.springsecurityApp.controllers;
 
 import appDir.springsecurityApp.model.Person;
-import appDir.springsecurityApp.services.RegistrationService;
+import appDir.springsecurityApp.service.UserServiceImpl;
 import appDir.springsecurityApp.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,12 +16,12 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
-	private final RegistrationService registrationService;
 	private final PersonValidator personValidator;
+	private final UserServiceImpl userService;
 	@Autowired
-	public AuthController(RegistrationService registrationService, PersonValidator personValidator) {
-		this.registrationService = registrationService;
+	public AuthController(PersonValidator personValidator, UserServiceImpl userService) {
 		this.personValidator = personValidator;
+		this.userService = userService;
 	}
 
 	@GetMapping(value = "/login")
@@ -40,7 +40,7 @@ public class AuthController {
 		personValidator.validate(person, bindingResult);
 		if(bindingResult.hasErrors())
 			return "/auth/registration";
-		registrationService.register(person);
+		userService.register(person);
 			return "redirect:/auth/login";
 	}
 }

@@ -3,9 +3,7 @@ package appDir.springsecurityApp.controllers;
 
 import appDir.springsecurityApp.model.Person;
 import appDir.springsecurityApp.model.Role;
-import appDir.springsecurityApp.service.AdminService;
 import appDir.springsecurityApp.service.AdminServiceImpl;
-import appDir.springsecurityApp.services.RegistrationService;
 import appDir.springsecurityApp.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,13 +18,11 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class AdminController {
     private final AdminServiceImpl adminService;
-    private final RegistrationService registrationService;
     private final PersonValidator personValidator;
 
     @Autowired
-    public AdminController(AdminServiceImpl adminService, RegistrationService registrationService, PersonValidator personValidator) {
+    public AdminController(AdminServiceImpl adminService, PersonValidator personValidator) {
         this.adminService = adminService;
-        this.registrationService = registrationService;
         this.personValidator = personValidator;
     }
 
@@ -41,34 +37,35 @@ public class AdminController {
         model.addAttribute("person", adminService.show(id));
         return "forAdmin/show";
     }
-//    @GetMapping("/new")
-//        public String createPerson(@ModelAttribute("person") @Valid Person person,
-//                BindingResult bindingResult) {
-//            personValidator.validate(person, bindingResult);
-//            if(bindingResult.hasErrors())
-//                return "/auth/registration";
-//            registrationService.register(person);
-//            return "redirect:/users/admin";
-//    }
-//    @PostMapping()
-//    public String create(@ModelAttribute("person") @Valid Person user, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "forAdmin/new";
-//        }
-//        personService.save(user);
-//        return "redirect:/users/admin";
-//    }
+
+    @GetMapping("/new")
+    public String newPage(@ModelAttribute("person") Person person) {
+        return "forAdmin/new";
+    }
+
+    @PostMapping("/new")
+    public String newUser(@ModelAttribute("person") @Valid Person person, @ModelAttribute("person") Role role,
+                          BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
+        if(bindingResult.hasErrors()) {
+            return "/forAdmin/new";
+        }
+        adminService.save(person, role);
+        return "redirect:/auth/login";
+    }
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id")int id) {
         model.addAttribute(adminService.show(id));
         return "forAdmin/editUser";
     }
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute("person") @Valid Person user, @ModelAttribute("role") @Valid Role role, BindingResult bindingResult, @PathVariable("id")int id) {
-        if (bindingResult.hasErrors()) {
-            return "forAdmin/editUser";
+    public String update(@ModelAttribute("person") @Valid Person person, @ModelAttribute("person") Role role,
+                         BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
+        if(bindingResult.hasErrors()) {
+            return "/forAdmin/show";
         }
-        adminService.update(user, role, id);
+        adminService.update(person, role);
         return "redirect:/user";
     }
 
