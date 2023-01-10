@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.InvalidParameterException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,12 +61,15 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void update(Person updatedPerson, Role role) {
         adminServiceCheck.doAdminStuff();
-        if(!updatedPerson.getPassword().equals(peopleRepository.findById(updatedPerson.getId()).get().getPassword())) {
+        if (peopleRepository.findByUsername(updatedPerson.getUsername()) != null && !((Integer)peopleRepository.findByUsername(updatedPerson.getUsername()).get().getId()).equals(updatedPerson.getId())) {
+            throw new InvalidParameterException("Cannot save user, such email already exists in the database: "
+                    + updatedPerson.getUsername());
+        }
+        if (updatedPerson.getPassword().isEmpty()) {
+            updatedPerson.setPassword(peopleRepository.findById(updatedPerson.getId()).get().getPassword());
+        } else {
             updatedPerson.setPassword(passwordEncoder.encode(updatedPerson.getPassword()));
         }
-        Set<Role> roles = updatedPerson.getRoles();
-        roles.add(role);
-        updatedPerson.setRoles(roles);
         peopleRepository.saveAndFlush(updatedPerson);
     }
 
