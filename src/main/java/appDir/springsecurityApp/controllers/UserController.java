@@ -17,13 +17,11 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private final PersonValidator personValidator;
     private final UserServiceImpl userService;
     private final PersonDetailsService personDetailsService;
 
     @Autowired
-    public UserController(PersonValidator personValidator, UserServiceImpl userService, PersonDetailsService personDetailsService) {
-        this.personValidator = personValidator;
+    public UserController(UserServiceImpl userService, PersonDetailsService personDetailsService) {
         this.userService = userService;
         this.personDetailsService = personDetailsService;
     }

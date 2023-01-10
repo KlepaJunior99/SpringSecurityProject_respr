@@ -21,16 +21,11 @@ import javax.validation.Valid;
 public class AdminController {
     private final AdminServiceImpl adminService;
     private final PersonValidator personValidator;
-    private final PersonDetailsService personDetailsService;
-    private final PeopleRepository peopleRepository;
 
     @Autowired
-    public AdminController(AdminServiceImpl adminService, PersonValidator personValidator, PersonDetailsService personDetailsService,
-                           PeopleRepository peopleRepository) {
+    public AdminController(AdminServiceImpl adminService, PersonValidator personValidator) {
         this.adminService = adminService;
         this.personValidator = personValidator;
-        this.personDetailsService = personDetailsService;
-        this.peopleRepository = peopleRepository;
     }
 
     @GetMapping("/admin")
