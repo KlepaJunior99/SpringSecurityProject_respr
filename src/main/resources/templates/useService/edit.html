@@ -29,6 +29,8 @@
     <label for="email">Ваш новый password: </label>
     <input type="text" th:field="*{password}" id="password/">
     <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" >Name error</div>
+    <p th:text="${person.getRoles()}">VALUE</p>
+    <form th:action="@{/user/{id}/edit(id=${person.getId()})}">
     <br/>
     <input type="submit" value="Обновить!">
   </form>

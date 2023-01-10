@@ -61,7 +61,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void update(Person updatedPerson, Role role) {
         adminServiceCheck.doAdminStuff();
-        if (peopleRepository.findByUsername(updatedPerson.getUsername()) != null && !((Integer)peopleRepository.findByUsername(updatedPerson.getUsername()).get().getId()).equals(updatedPerson.getId())) {
+        if(peopleRepository.findByUsername(updatedPerson.getUsername()) != null && !((Integer)peopleRepository.findByUsername(updatedPerson.getUsername()).get().getId()).equals(updatedPerson.getId())) {
             throw new InvalidParameterException("Cannot save user, such email already exists in the database: "
                     + updatedPerson.getUsername());
         }

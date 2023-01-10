@@ -40,10 +40,7 @@ public class UserController {
         return "useService/edit";
     }
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult, @PathVariable("id")int id) {
-        personValidator.validate(person, bindingResult);
-        if(bindingResult.hasErrors())
-            return "useService/show";
+    public String update(@ModelAttribute("person") @Valid Person person) {
         userService.update(person);
         return "redirect:/user";
     }

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.InvalidParameterException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,8 +39,21 @@ public class UserServiceImpl implements UserService {
         peopleRepository.save(person);
     }
 
+    @Transactional
     @Override
     public void update(Person updatedPerson) {
+        if(peopleRepository.findByUsername(updatedPerson.getUsername()).isPresent() && !((Integer)peopleRepository.findByUsername(updatedPerson.getUsername()).get().getId()).equals(updatedPerson.getId())) {
+            throw new InvalidParameterException("Cannot save user, such email already exists in the database: "
+                    + updatedPerson.getUsername());
+        }
+        if (updatedPerson.getPassword().isEmpty()) {
+            updatedPerson.setPassword(peopleRepository.findById(updatedPerson.getId()).get().getPassword());
+        } else {
+            updatedPerson.setPassword(passwordEncoder.encode(updatedPerson.getPassword()));
+        }
+        Set<Role> roleSet = updatedPerson.getRoles();
+        roleSet.add(roleRepository.findByName("ROLE_USER").get());
+        updatedPerson.setRoles(roleSet);
         peopleRepository.saveAndFlush(updatedPerson);
     }
 
