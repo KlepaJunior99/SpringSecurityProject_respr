@@ -1,7 +1,7 @@
 package appDir.springsecurityApp.service;
 
-import appDir.springsecurityApp.model.Role;
 import appDir.springsecurityApp.model.Person;
+import appDir.springsecurityApp.model.Role;
 import appDir.springsecurityApp.rep.PeopleRepository;
 import appDir.springsecurityApp.rep.RoleRepository;
 import appDir.springsecurityApp.services.AdminServiceCheck;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.InvalidParameterException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +39,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional()
     @Override
-    public Person show(int id) {
+    public Person show(long id) {
         adminServiceCheck.doAdminStuff();
         return peopleRepository.findById(id).get();
     }
@@ -61,7 +60,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void update(Person updatedPerson, Role role) {
         adminServiceCheck.doAdminStuff();
-        if(peopleRepository.findByUsername(updatedPerson.getUsername()) != null && !((Integer)peopleRepository.findByUsername(updatedPerson.getUsername()).get().getId()).equals(updatedPerson.getId())) {
+        if(peopleRepository.findByUsername(updatedPerson.getUsername()) != null && !(peopleRepository.findByUsername(updatedPerson.getUsername()).get().getId()).equals(updatedPerson.getId())) {
             throw new InvalidParameterException("Cannot save user, such email already exists in the database: "
                     + updatedPerson.getUsername());
         }
@@ -75,7 +74,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         adminServiceCheck.doAdminStuff();
         peopleRepository.deleteById(id);
 

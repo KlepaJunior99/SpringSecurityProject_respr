@@ -1,13 +1,12 @@
 package appDir.springsecurityApp.service;
 
 import appDir.springsecurityApp.model.Person;
-import appDir.springsecurityApp.model.Role;
 
 public interface UserService {
-    Person show(int id);
+    Person show(long id);
 
     void update(Person updatedPerson);
 
-    void delete(int id);
+    void delete(long id);
     void register(Person person);
 }

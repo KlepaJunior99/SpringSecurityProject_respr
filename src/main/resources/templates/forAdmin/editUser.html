@@ -8,29 +8,30 @@
 <body>
 <div>
   <form th:method="POST" th:action="@{/users/update/{id}(id=${person.getId()})}" th:object="${person}">
-    <label for="name">Новый пользовательский имя: </label>
-    <input type="text" th:field="*{name}" id="name/">
-    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" >Name error</div>
+    <label for="firstName/">Новый пользовательский имя: </label>
+    <input type="text" th:field="*{firstName}" id="firstName/">
+    <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" >Name error</div>
     <br/>
     <br/>
-    <label for="age">Новый пользовательский возраст: </label>
+    <label for="lastname/">Новая пользовательская фамилия: </label>
+    <input type="text" th:field="*{lastName}" id="lastName/">
+    <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" >Name error</div>
+    <br/>
+    <br/>
+    <label for="age/">Новый пользовательский возраст: </label>
     <input type="number" th:field="*{age}" id="age/">
     <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}" >Name error</div>
     <br/>
     <br/>
-    <label for="email">Новый пользовательский email: </label>
-    <input type="text" th:field="*{email}" id="email/">
-    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" >Name error</div>
-    <br/>
-    <label for="username">Новый пользовательский username: </label>
+    <label for="username/">Новый пользовательский username: </label>
     <input type="text" th:field="*{username}" id="username/">
     <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}" >Name error</div>
     <br/>
-    <label for="email">Новый пользовательский password: </label>
-    <input type="text" th:field="*{password}" id="password/">
-    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" >Name error</div>
-    <br/>
-    <label for="roles">Новая пользовательский роль: </label>
+    <label for="password/">Новый пользовательский password: </label>
+        <input type="password" th:field="*{password}" id="password/">
+        <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" >Name error</div>
+        <br/>
+    <label for="roles/">Новая пользовательский роль: </label>
     <input type="text" th:field="*{roles}" id="roles/">
     <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" >Name error</div>
     <br/>

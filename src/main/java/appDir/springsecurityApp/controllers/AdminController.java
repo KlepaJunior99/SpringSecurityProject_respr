@@ -3,9 +3,7 @@ package appDir.springsecurityApp.controllers;
 
 import appDir.springsecurityApp.model.Person;
 import appDir.springsecurityApp.model.Role;
-import appDir.springsecurityApp.rep.PeopleRepository;
 import appDir.springsecurityApp.service.AdminServiceImpl;
-import appDir.springsecurityApp.services.PersonDetailsService;
 import appDir.springsecurityApp.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

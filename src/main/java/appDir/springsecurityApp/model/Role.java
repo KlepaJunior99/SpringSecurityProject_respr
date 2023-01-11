@@ -1,35 +1,26 @@
 package appDir.springsecurityApp.model;
 
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
+import javax.persistence.*;
+import java.util.Objects;
+
+@Data
 @Entity
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
-
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    protected int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public boolean persisted() {
-        return id != 0;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-    @Column(unique = true)
+    @Column
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private List<Person> person = new ArrayList<>();
+    @Override
+    public String getAuthority() {
+        return getName();
+    }
 
     public Role() {
     }
@@ -38,21 +29,16 @@ public class Role implements GrantedAuthority {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(id, role.id);
     }
 
     @Override
-    public String getAuthority() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Role [id = %d; name = %s;]", id, name);
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

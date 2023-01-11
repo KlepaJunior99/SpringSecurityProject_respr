@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional()
     @Override
-    public Person show(int id) {
+    public Person show(long id) {
         return peopleRepository.findById(id).get();
     }
     @Override
@@ -36,13 +36,13 @@ public class UserServiceImpl implements UserService {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(roleRepository.findByName("ROLE_USER").get());
         person.setRoles(roleSet);
+
         peopleRepository.save(person);
     }
-
     @Transactional
     @Override
     public void update(Person updatedPerson) {
-        if(peopleRepository.findByUsername(updatedPerson.getUsername()).isPresent() && !((Integer)peopleRepository.findByUsername(updatedPerson.getUsername()).get().getId()).equals(updatedPerson.getId())) {
+        if(peopleRepository.findByUsername(updatedPerson.getUsername()).isPresent() && !(peopleRepository.findByUsername(updatedPerson.getUsername()).get().getId()).equals(updatedPerson.getId())) {
             throw new InvalidParameterException("Cannot save user, such email already exists in the database: "
                     + updatedPerson.getUsername());
         }
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         peopleRepository.deleteById(id);
     }
 }
