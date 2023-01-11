@@ -32,8 +32,19 @@
         <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" >Name error</div>
         <br/>
     <label for="roles/">Новая пользовательский роль: </label>
-    <input type="text" th:field="*{roles}" id="roles/">
-    <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" >Name error</div>
+    <td>
+      <th:block th:each="role:${person.getRoles()}">
+        <p th:text="${role.toString()}"></p>
+      </th:block>
+      <tr>
+        <td>Роли</td>
+        <br/>
+        <td>
+          <label>Админ<input type="checkbox" name="roles" value=1 checked></label>
+          <label>Пользователь<input type="checkbox" name="roles" value=2></label>
+        </td>
+      </tr>
+    </td>
     <br/>
     <input type="submit" value="Обновить!">
   </form>

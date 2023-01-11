@@ -33,10 +33,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void register(Person person) {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        Set<Role> roleSet = new HashSet<>();
+        Set<Role> roleSet =person.getRoles();
         roleSet.add(roleRepository.findByName("ROLE_USER").get());
         person.setRoles(roleSet);
-
         peopleRepository.save(person);
     }
     @Transactional
